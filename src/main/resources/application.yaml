@@ -14,5 +14,5 @@ spring:
       hibernate:
         format_sql: true
 jwt:
-  SECRET_KEY: 5007cbe87e2807243289f5cec99a57364348226c638e09d8dc008ae99e3918cd
+  SECRET_KEY: {$SECRET_KEY}
 
