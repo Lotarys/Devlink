@@ -1,9 +1,9 @@
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    username: {$username}
-    password: {$password}
-    url: {$url}
+    username: lotarys
+    password: Zk210mvlokaceqs6W8MP1XoDkP9Fyu9x
+    url: postgres://lotarys:Zk210mvlokaceqs6W8MP1XoDkP9Fyu9x@dpg-cl0luf48s0fs73eqp7v0-a/devlink_mq8n
   jpa:
     hibernate:
       ddl-auto: update
@@ -14,5 +14,5 @@ spring:
       hibernate:
         format_sql: true
 jwt:
-  SECRET_KEY: {$SECRET_KEY}
+  SECRET_KEY: 5007cbe87e2807243289f5cec99a57364348226c638e09d8dc008ae99e3918cd
 

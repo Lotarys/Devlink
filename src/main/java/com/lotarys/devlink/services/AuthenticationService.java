@@ -32,7 +32,7 @@ public class AuthenticationService {
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         userRepository.save(user);
         String jwtToken = jwtService.generateToken(user);
-        return new AuthenticationResponse(jwtToken);
+        return new AuthenticationResponse(jwtToken,request.getEmail());
     }
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
@@ -43,6 +43,6 @@ public class AuthenticationService {
                 )
         ).getPrincipal();
         var jwtToken = jwtService.generateToken(userDetails);
-        return new AuthenticationResponse(jwtToken);
+        return new AuthenticationResponse(jwtToken,request.getEmail());
     }
 }
