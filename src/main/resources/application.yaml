@@ -1,9 +1,9 @@
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://dpg-cl0luf48s0fs73eqp7v0-a.frankfurt-postgres.render.com:5432/devlink_mq8n
     username: lotarys
     password: Zk210mvlokaceqs6W8MP1XoDkP9Fyu9x
-    url: postgres://lotarys:Zk210mvlokaceqs6W8MP1XoDkP9Fyu9x@dpg-cl0luf48s0fs73eqp7v0-a/devlink_mq8n
   jpa:
     hibernate:
       ddl-auto: update
