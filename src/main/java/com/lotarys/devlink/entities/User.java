@@ -31,14 +31,6 @@ public class User implements UserDetails {
 
     private String password;
 
-    public List<Card> getCards() {
-        return cards;
-    }
-
-    public void setCards(List<Card> cards) {
-        this.cards = cards;
-    }
-
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     private List<Card> cards = new ArrayList<>();
 
