@@ -15,4 +15,6 @@ spring:
         format_sql: true
 jwt:
   SECRET_KEY: 5007cbe87e2807243289f5cec99a57364348226c638e09d8dc008ae99e3918cd
-
+  lifetime: 30m
+yandex:
+  token: 422aee59d90e4f35a9c42044e9d86a6b

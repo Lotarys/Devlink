@@ -38,7 +38,7 @@ public class AuthController {
 
     @GetMapping("/me")
     public AuthenticationResponse me(@AuthenticationPrincipal User user, HttpServletRequest request) {
-        return new AuthenticationResponse(request.getHeader("Authorization").substring(7),user.getEmail(), user.getFirstName(), user.getLastName());
+        return authenticationService.Userinfo(request.getHeader("Authorization").substring(7), user.getEmail());
     }
 
     @ExceptionHandler(NotFoundUserException.class)

@@ -40,9 +40,15 @@ public class AuthenticationService {
                 )
         ).getPrincipal();
         var jwtToken = jwtService.generateToken(userDetails);
+        User user = (User) userDetails;
         return new AuthenticationResponse(jwtToken,
                 request.getEmail(),
-                userService.findByEmail(request.getEmail()).getFirstName(),
-                userService.findByEmail(request.getEmail()).getLastName());
+                user.getFirstName(),
+                user.getLastName());
+    }
+
+    public AuthenticationResponse Userinfo(String token,String email) {
+        User user = userService.findByEmail(email);
+        return new AuthenticationResponse(token, email, user.getFirstName(), user.getLastName());
     }
 }
