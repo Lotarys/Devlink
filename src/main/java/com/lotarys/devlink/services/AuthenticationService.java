@@ -47,8 +47,7 @@ public class AuthenticationService {
                 user.getLastName());
     }
 
-    public AuthenticationResponse Userinfo(String token,String email) {
-        User user = userService.findByEmail(email);
-        return new AuthenticationResponse(token, email, user.getFirstName(), user.getLastName());
+    public AuthenticationResponse Userinfo(String token, User user) {
+        return new AuthenticationResponse(token, user.getEmail(), user.getFirstName(), user.getLastName());
     }
 }

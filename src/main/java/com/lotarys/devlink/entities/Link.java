@@ -16,6 +16,7 @@ public class Link {
     private Long id;
 
     private String name;
+
     private String url;
 
     @ManyToOne(fetch = FetchType.LAZY)
