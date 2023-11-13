@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class Link {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

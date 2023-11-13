@@ -14,7 +14,11 @@ import java.util.List;
 @NoArgsConstructor
 @Data
 public class Card {
+
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     private String url;
 
     private String title;

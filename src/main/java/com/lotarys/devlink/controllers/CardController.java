@@ -24,7 +24,7 @@ public class CardController {
   @PostMapping()
     public ResponseEntity<?> createCard(@RequestBody CardDTO card, @AuthenticationPrincipal User user) {
         cardService.createCard(card,user);
-        return ResponseEntity.status(HttpStatus.CREATED).body(cardService.getCardByUrl(card.getUrl()));
+        return ResponseEntity.ok().body(HttpStatus.CREATED);
     }
 
 }

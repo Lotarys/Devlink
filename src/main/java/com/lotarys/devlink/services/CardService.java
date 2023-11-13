@@ -18,10 +18,11 @@ import java.util.List;
 public class CardService {
 
     private final CardRepository cardRepository;
+    private final LinkService linkService;
 
     public void createCard(CardDTO cardDTO, User user) {
-        Card card = new Card();
-        if(cardRepository.findById(cardDTO.getUrl()).isEmpty()) {
+        if(cardRepository.findByUrl(cardDTO.getUrl()).isEmpty()) {
+            Card card = new Card();
             card.setUrl(cardDTO.getUrl());
             card.setUser(user);
             card.setViews(0L);
@@ -29,6 +30,7 @@ public class CardService {
             card.setLinks(cardDTO.getLinks());
             card.setPhoto(user.getPhoto());
             cardRepository.save(card);
+            linkService.addLinks(cardDTO.getLinks(), card);
         } else {
             throw new CardAlreadyExistException("Card with url " + cardDTO.getUrl() + " already exist");
         }
@@ -39,7 +41,7 @@ public class CardService {
     }
 
     public Card getCardByUrl(String url) {
-        return cardRepository.findById(url).orElseThrow(() -> new NotFoundCardException("Card with url " + url + "does not exist"));
+        return cardRepository.findByUrl(url).orElseThrow(() -> new NotFoundCardException("Card with url " + url + "does not exist"));
     }
 
     public void addLinkToCard(Card card, List<Link> links) {
