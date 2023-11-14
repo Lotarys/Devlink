@@ -4,6 +4,7 @@ import com.lotarys.devlink.entities.User;
 import com.lotarys.devlink.models.AuthenticationRequest;
 import com.lotarys.devlink.models.AuthenticationResponse;
 import com.lotarys.devlink.models.RegisterRequest;
+import com.lotarys.devlink.utils.NotFoundUserException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -48,6 +49,9 @@ public class AuthenticationService {
     }
 
     public AuthenticationResponse Userinfo(String token, User user) {
-        return new AuthenticationResponse(token, user.getEmail(), user.getFirstName(), user.getLastName());
+        if(user == null) {
+            throw new NotFoundUserException("User does not exist");
+        } else
+            return new AuthenticationResponse(token, user.getEmail(), user.getFirstName(), user.getLastName());
     }
 }

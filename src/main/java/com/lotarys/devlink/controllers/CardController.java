@@ -26,5 +26,4 @@ public class CardController {
         cardService.createCard(card,user);
         return ResponseEntity.ok().body(HttpStatus.CREATED);
     }
-
 }

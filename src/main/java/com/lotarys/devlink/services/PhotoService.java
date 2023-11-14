@@ -1,6 +1,7 @@
 package com.lotarys.devlink.services;
 
 import com.lotarys.devlink.entities.User;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.InputStreamResource;
@@ -22,12 +23,12 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 @Service
+@RequiredArgsConstructor
 public class PhotoService {
     @Value("${yandex.token}")
     private String OAUTH_TOKEN;
 
-    @Autowired
-    private RestTemplate restTemplate;
+    private RestTemplate restTemplate = new RestTemplate();
 
     private String getUrlForUpload(String username) {
         ResponseEntity<String> getUrl = restTemplate.exchange(
@@ -50,10 +51,12 @@ public class PhotoService {
         return username + "_photo";
     }
 
-    private void deleteFile(String username) {
-        ResponseEntity<String> response = restTemplate.exchange("https://cloud-api.yandex.net/v1/disk/resources?path=" + createPath(username),
+    private void deleteFile(User user) {
+        HttpHeaders headers = createEntityWithOauth().getHeaders();
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+        ResponseEntity<String> response = restTemplate.exchange(user.getPhoto() + "&permanently=true",
                 HttpMethod.DELETE,
-                createEntityWithOauth(),
+                entity,
                 String.class);
     }
 
@@ -62,7 +65,7 @@ public class PhotoService {
         body.add("file", file.getResource());
         HttpEntity<MultiValueMap<String, Object>> entityForPostFile = new HttpEntity<>(body, null);
         ResponseEntity<String> response = restTemplate.exchange(uploadUrl,
-                HttpMethod.POST,
+                HttpMethod.PUT,
                 entityForPostFile,
                 String.class);
     }
@@ -88,13 +91,14 @@ public class PhotoService {
         return new InputStreamResource(fileStream);
     }
 
-    public void postFile(User user, MultipartFile file) throws IOException {
+    public String postFile(User user, MultipartFile file) throws IOException {
         String username = user.getUsername();
-        if (user.getPhoto() != null) {
+        if (user.getPhoto() == null) {
             uploadFile(username, file, getUrlForUpload(username));
         } else {
-            deleteFile(username);
+            deleteFile(user);
             uploadFile(username,file,getUrlForUpload(username));
         }
+        return "https://cloud-api.yandex.net/v1/disk/resources?path" + createPath(username);
     }
 }
