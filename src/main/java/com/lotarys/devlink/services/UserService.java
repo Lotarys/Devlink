@@ -2,12 +2,13 @@ package com.lotarys.devlink.services;
 
 
 import com.lotarys.devlink.entities.User;
-import com.lotarys.devlink.models.UpdateUserRequest;
+import com.lotarys.devlink.dtos.UserUpdateDTO;
 import com.lotarys.devlink.repositories.UserRepository;
-import com.lotarys.devlink.utils.NotFoundUserException;
-import com.lotarys.devlink.utils.UserAlreadyExistException;
+import com.lotarys.devlink.exceptions.NotFoundUserException;
+import com.lotarys.devlink.exceptions.UserAlreadyExistException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 
@@ -22,6 +23,7 @@ public class UserService {
                 new NotFoundUserException("User with email: " + email + " not found"));
     }
 
+    @Transactional
     public void save(User user) {
         if(userRepository.findByEmail(user.getEmail()).isEmpty()) {
             userRepository.save(user);
@@ -30,7 +32,8 @@ public class UserService {
         }
     }
 
-    public void updateUser(User user, UpdateUserRequest updatedUser) throws IOException {
+    @Transactional
+    public void updateUser(User user, UserUpdateDTO updatedUser) throws IOException {
         String photoUrl = photoService.postFile(user ,updatedUser.getPhoto());
         user.setFirstName(updatedUser.getFirstName());
         user.setLastName(updatedUser.getLastName());

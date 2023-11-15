@@ -1,8 +1,8 @@
 package com.lotarys.devlink.services;
 
 import com.lotarys.devlink.entities.User;
+import com.lotarys.devlink.exceptions.GetPhotoException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpEntity;
@@ -19,7 +19,6 @@ import javax.json.JsonObject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 @Service
@@ -81,17 +80,16 @@ public class PhotoService {
         return jsonObject.getString("href");
     }
 
-    public InputStreamResource getPhoto(String username) throws IOException {
-        ResponseEntity<String> getUrl = restTemplate.exchange(
-                getUrlForDownload(username),
-                HttpMethod.GET,
-                createEntityWithOauth(),
-                String.class);
-        InputStream fileStream = new URL(getUrlForDownload(username)).openStream();
-        return new InputStreamResource(fileStream);
+    public InputStreamResource getPhoto(String username) {
+        try {
+            InputStream fileStream = new URL(getUrlForDownload(username)).openStream();
+            return new InputStreamResource(fileStream);
+        } catch (Exception e) {
+            throw new GetPhotoException("Failed to get photo");
+        }
     }
 
-    public String postFile(User user, MultipartFile file) throws IOException {
+    public String postFile(User user, MultipartFile file) {
         String username = user.getUsername();
         if (user.getPhoto() == null) {
             uploadFile(username, file, getUrlForUpload(username));

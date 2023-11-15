@@ -1,15 +1,14 @@
-package com.lotarys.devlink.models;
+package com.lotarys.devlink.dtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.web.multipart.MultipartFile;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UpdateUserRequest {
-    private MultipartFile photo;
+public class UserDTO {
     private String firstName;
+
     private String lastName;
 }

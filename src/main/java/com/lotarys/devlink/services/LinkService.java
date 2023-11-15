@@ -12,7 +12,6 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class LinkService {
-
     private final LinkRepository linkRepository;
 
     public void addLinks(List<Link> links, Card card) {

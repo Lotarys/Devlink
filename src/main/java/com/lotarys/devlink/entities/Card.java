@@ -14,7 +14,6 @@ import java.util.List;
 @NoArgsConstructor
 @Data
 public class Card {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -26,7 +25,6 @@ public class Card {
     private String photo;
 
     private Long views;
-
 
     @OneToMany(mappedBy = "card", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Link> links = new ArrayList<>();

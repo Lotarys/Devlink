@@ -19,7 +19,6 @@ import org.springframework.web.client.RestTemplate;
 public class ApplicationConfig {
     private final UserService userService;
 
-
     @Bean
     public UserDetailsService userDetailsService() {
         return email -> userService.findByEmail(email);

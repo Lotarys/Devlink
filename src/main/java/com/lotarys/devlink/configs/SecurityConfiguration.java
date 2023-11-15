@@ -18,7 +18,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @RequiredArgsConstructor
 @EnableWebSecurity
 public class SecurityConfiguration implements WebMvcConfigurer {
-
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
 
@@ -36,7 +35,7 @@ public class SecurityConfiguration implements WebMvcConfigurer {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth ->
                         auth
-                                .requestMatchers("/auth/**")
+                                .requestMatchers("/auth/register", "auth/authenticate")
                                 .permitAll()
                                 .anyRequest()
                                 .authenticated()
