@@ -89,21 +89,7 @@ public class PhotoService {
     public String getPhoto(String username) {
         try {
             InputStream fileStream = new URL(getUrlForDownload(username)).openStream();
-            BufferedImage image = ImageIO.read(fileStream);
-            File compressedImageFile = new File("compressed_image.jpg");
-            OutputStream os = new FileOutputStream(compressedImageFile);
-            Iterator<ImageWriter> writers = ImageIO.getImageWritersByFormatName("jpg");
-            ImageWriter writer = writers.next();
-            ImageOutputStream ios = ImageIO.createImageOutputStream(os);
-            writer.setOutput(ios);
-            ImageWriteParam param = writer.getDefaultWriteParam();
-            param.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
-            param.setCompressionQuality(0.5f);
-            writer.write(null, new IIOImage(image, null, null), param);
-            os.close();
-            ios.close();
-            writer.dispose();
-            byte[] imageBytes = Files.readAllBytes(compressedImageFile.toPath());
+            byte[] imageBytes = IOUtils.toByteArray(fileStream);
             String encodedString = Base64.getEncoder().encodeToString(imageBytes);
             return encodedString;
         } catch (Exception e) {
