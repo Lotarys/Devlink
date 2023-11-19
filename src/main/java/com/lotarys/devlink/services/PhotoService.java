@@ -3,23 +3,29 @@ package com.lotarys.devlink.services;
 import com.lotarys.devlink.entities.User;
 import com.lotarys.devlink.exceptions.GetPhotoException;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.InputStreamResource;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
+
+import javax.imageio.IIOImage;
+import javax.imageio.ImageIO;
+import javax.imageio.ImageWriteParam;
+import javax.imageio.ImageWriter;
+import javax.imageio.stream.ImageOutputStream;
 import javax.json.Json;
 import javax.json.JsonObject;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.StringReader;
+import java.awt.image.BufferedImage;
+import java.io.*;
 import java.net.URL;
+import java.nio.file.Files;
+import java.util.Base64;
+import java.util.Iterator;
 
 @Service
 @RequiredArgsConstructor
@@ -71,7 +77,7 @@ public class PhotoService {
 
     private String getUrlForDownload(String username) {
         ResponseEntity<String> getUrl = restTemplate.exchange(
-                "https://cloud-api.yandex.net/v1/disk/resources/upload?path=" + createPath(username),
+                "https://cloud-api.yandex.net/v1/disk/resources/download?path=" + createPath(username),
                 HttpMethod.GET,
                 createEntityWithOauth(),
                 String.class);
@@ -80,10 +86,26 @@ public class PhotoService {
         return jsonObject.getString("href");
     }
 
-    public InputStreamResource getPhoto(String username) {
+    public String getPhoto(String username) {
         try {
             InputStream fileStream = new URL(getUrlForDownload(username)).openStream();
-            return new InputStreamResource(fileStream);
+            BufferedImage image = ImageIO.read(fileStream);
+            File compressedImageFile = new File("compressed_image.jpg");
+            OutputStream os = new FileOutputStream(compressedImageFile);
+            Iterator<ImageWriter> writers = ImageIO.getImageWritersByFormatName("jpg");
+            ImageWriter writer = writers.next();
+            ImageOutputStream ios = ImageIO.createImageOutputStream(os);
+            writer.setOutput(ios);
+            ImageWriteParam param = writer.getDefaultWriteParam();
+            param.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
+            param.setCompressionQuality(0.5f);
+            writer.write(null, new IIOImage(image, null, null), param);
+            os.close();
+            ios.close();
+            writer.dispose();
+            byte[] imageBytes = Files.readAllBytes(compressedImageFile.toPath());
+            String encodedString = Base64.getEncoder().encodeToString(imageBytes);
+            return encodedString;
         } catch (Exception e) {
             throw new GetPhotoException("Failed to get photo");
         }

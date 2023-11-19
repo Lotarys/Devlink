@@ -11,7 +11,7 @@ import org.springframework.core.io.InputStreamResource;
 public class AuthenticationResponse {
     private String token;
     private String email;
-    private InputStreamResource photo;
+    private String photo;
     private String firstName;
     private String lastName;
 }

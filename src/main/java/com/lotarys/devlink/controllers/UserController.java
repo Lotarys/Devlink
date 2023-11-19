@@ -31,7 +31,7 @@ public class UserController {
     }
 
     @GetMapping("/photo")
-    public ResponseEntity<InputStreamResource> getPhoto(@AuthenticationPrincipal User user) {
+    public ResponseEntity<String> getPhoto(@AuthenticationPrincipal User user) {
         return ResponseEntity
                 .ok()
                 .body(photoService.getPhoto(user.getUsername()));
