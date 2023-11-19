@@ -24,9 +24,10 @@ public class UserService {
     }
 
     @Transactional
-    public void save(User user) {
+    public User save(User user) {
         if(userRepository.findByEmail(user.getEmail()).isEmpty()) {
             userRepository.save(user);
+            return user;
         } else {
             throw new UserAlreadyExistException("User with this email already exist");
         }
