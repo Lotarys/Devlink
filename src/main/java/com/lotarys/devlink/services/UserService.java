@@ -26,6 +26,7 @@ public class UserService {
     @Transactional
     public User save(User user) {
         if(userRepository.findByEmail(user.getEmail()).isEmpty()) {
+            user.setPhoto("https://img.freepik.com/free-vector/cute-man-working-laptop-cartoon-vector-icon-illustration-people-technology-icon-concept-isolated_138676-9123.jpg?size=338&ext=jpg&ga=GA1.1.386372595.1698624000&semt=ais");
             userRepository.save(user);
             return user;
         } else {

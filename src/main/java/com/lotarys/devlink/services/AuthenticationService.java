@@ -45,7 +45,7 @@ public class AuthenticationService {
         User user = (User) userDetails;
         return new AuthenticationResponse(jwtToken,
                 user.getEmail(),
-                photoService.getPhoto(user.getUsername())
+                photoService.getPhoto(user.getUsername()),
                 user.getFirstName(),
                 user.getLastName());
     }

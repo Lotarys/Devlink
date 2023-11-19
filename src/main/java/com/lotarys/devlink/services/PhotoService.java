@@ -59,7 +59,7 @@ public class PhotoService {
                 String.class);
     }
 
-    private void uploadFile(String username, MultipartFile file, String uploadUrl) {
+    private void uploadFile(MultipartFile file, String uploadUrl) {
         MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
         body.add("file", file.getResource());
         HttpEntity<MultiValueMap<String, Object>> entityForPostFile = new HttpEntity<>(body, null);
@@ -91,12 +91,8 @@ public class PhotoService {
 
     public String postFile(User user, MultipartFile file) {
         String username = user.getUsername();
-        if (user.getPhoto() == null) {
-            uploadFile(username, file, getUrlForUpload(username));
-        } else {
-            deleteFile(user);
-            uploadFile(username,file,getUrlForUpload(username));
-        }
+        deleteFile(user);
+        uploadFile(file,getUrlForUpload(username));
         return "https://cloud-api.yandex.net/v1/disk/resources?path" + createPath(username);
     }
 }
