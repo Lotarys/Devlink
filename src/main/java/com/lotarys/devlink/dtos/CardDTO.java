@@ -11,8 +11,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CardDTO {
-        private String url;
-
         private String title;
 
         private List<Link> links;

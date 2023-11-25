@@ -98,8 +98,10 @@ public class ImageService {
 
     public String postImage(User user, MultipartFile file) {
         String username = user.getUsername();
-        deleteImage(user);
-        uploadImage(file,getUrlForUpload(username));
-        return "https://cloud-api.yandex.net/v1/disk/resources?path" + createPath(username);
+        if(!user.getPhoto().equals("default")) {
+            deleteImage(user);
+        }
+        uploadImage(file, getUrlForUpload(username));
+        return "https://cloud-api.yandex.net/v1/disk/resources?path=" + createPath(username);
     }
 }

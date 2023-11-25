@@ -11,8 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
-import java.io.IOException;
+import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 @RequiredArgsConstructor
@@ -22,7 +21,14 @@ public class UserController {
     private final ImageService imageService;
 
     @PostMapping("/update")
-    public ResponseEntity<?> updateUser(@AuthenticationPrincipal User user, @RequestBody UserUpdateDTO updateUserRequest) throws IOException {
+    public ResponseEntity<?> updateUser(@AuthenticationPrincipal User user,
+                                        @RequestParam("firstName") String firstName,
+                                        @RequestParam("lastName") String lastName,
+                                        @RequestParam("file") MultipartFile file)  {
+        UserUpdateDTO updateUserRequest = new UserUpdateDTO();
+        updateUserRequest.setFirstName(firstName);
+        updateUserRequest.setLastName(lastName);
+        updateUserRequest.setRusiklox(file);
         userService.updateUser(user, updateUserRequest);
         return ResponseEntity
                 .status(HttpStatus.OK)

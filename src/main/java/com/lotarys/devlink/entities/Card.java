@@ -22,8 +22,6 @@ public class Card {
 
     private String title;
 
-    private String photo;
-
     private Long views;
 
     @OneToMany(mappedBy = "card", cascade = CascadeType.ALL, fetch = FetchType.EAGER)

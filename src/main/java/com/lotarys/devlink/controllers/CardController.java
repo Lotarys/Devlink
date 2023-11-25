@@ -8,6 +8,7 @@ import com.lotarys.devlink.services.CardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -22,10 +23,8 @@ public class CardController {
     private final CardService cardService;
 
   @PostMapping()
-  public ResponseEntity<Card> createCard(@RequestBody CardDTO card, @AuthenticationPrincipal User user) {
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(cardService.createCard(card,user));
+  public ResponseEntity<?> createCard(@RequestBody CardDTO card, @AuthenticationPrincipal User user) {
+        return ResponseEntity.ok().body(HttpStatus.CREATED);
   }
 
   @GetMapping("/{url}")

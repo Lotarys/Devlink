@@ -19,23 +19,36 @@ import java.util.List;
 public class CardService {
     private final CardRepository cardRepository;
     private final LinkService linkService;
+    private final ImageService imageService;
+
+    private String generateRandomString() {
+            String charLower = "abcdefghijklmnopqrstuvwxyz";
+            String charUpper = charLower.toUpperCase();
+            String number = "0123456789";
+            String dataForRandomString = charLower + charUpper + number;
+            StringBuilder sb = new StringBuilder(8);
+            for (int i = 0; i < 8; i++) {
+                int rndCharAt = (int) (Math.random() * dataForRandomString.length());
+                char rndChar = dataForRandomString.charAt(rndCharAt);
+                sb.append(rndChar);
+            }
+            return sb.toString();
+    }
 
     @Transactional
-    public Card createCard(CardDTO cardDTO, User user) {
-        if(cardRepository.findByUrl(cardDTO.getUrl()).isEmpty()) {
+    public void createCard(CardDTO cardDTO, User user) {
             Card card = new Card();
-            card.setUrl(cardDTO.getUrl());
+            String randomString = generateRandomString();
+            while (cardRepository.findByUrl(randomString) == null) {
+                randomString = generateRandomString();
+            }
+            card.setUrl(randomString);
             card.setUser(user);
             card.setViews(0L);
             card.setTitle(cardDTO.getTitle());
             card.setLinks(cardDTO.getLinks());
-            card.setPhoto(user.getPhoto());
             cardRepository.save(card);
             linkService.addLinks(cardDTO.getLinks(), card);
-            return card;
-        } else {
-            throw new CardAlreadyExistException("Card with url " + cardDTO.getUrl() + " already exist");
-        }
     }
 
     public List<Card> getCardsOfUser(User user) {

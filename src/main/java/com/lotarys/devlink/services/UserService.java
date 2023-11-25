@@ -10,8 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.IOException;
-
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -35,8 +33,8 @@ public class UserService {
     }
 
     @Transactional
-    public void updateUser(User user, UserUpdateDTO updatedUser) throws IOException {
-        String photoUrl = imageService.postImage(user ,updatedUser.getPhoto());
+    public void updateUser(User user, UserUpdateDTO updatedUser) {
+        String photoUrl = imageService.postImage(user ,updatedUser.getRusiklox());
         user.setFirstName(updatedUser.getFirstName());
         user.setLastName(updatedUser.getLastName());
         user.setPhoto(photoUrl);

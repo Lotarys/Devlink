@@ -9,7 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserUpdateDTO {
-    private MultipartFile photo;
+    private MultipartFile image;
 
     private String firstName;
 
