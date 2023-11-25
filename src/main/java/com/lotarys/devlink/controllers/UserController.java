@@ -3,10 +3,9 @@ package com.lotarys.devlink.controllers;
 import com.lotarys.devlink.dtos.UserDTO;
 import com.lotarys.devlink.entities.User;
 import com.lotarys.devlink.dtos.UserUpdateDTO;
-import com.lotarys.devlink.services.PhotoService;
+import com.lotarys.devlink.services.ImageService;
 import com.lotarys.devlink.services.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -20,7 +19,7 @@ import java.io.IOException;
 @RequestMapping("/user")
 public class UserController {
     private final UserService userService;
-    private final PhotoService photoService;
+    private final ImageService imageService;
 
     @PostMapping("/update")
     public ResponseEntity<?> updateUser(@AuthenticationPrincipal User user, @RequestBody UserUpdateDTO updateUserRequest) throws IOException {
@@ -34,7 +33,7 @@ public class UserController {
     public ResponseEntity<String> getPhoto(@AuthenticationPrincipal User user) {
         return ResponseEntity
                 .ok()
-                .body(photoService.getPhoto(user.getUsername()));
+                .body(imageService.getImage(user));
     }
 
     @GetMapping("/info")

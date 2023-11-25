@@ -16,7 +16,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
-    private final PhotoService photoService;
+    private final ImageService imageService;
 
     public User findByEmail(String email) {
         return userRepository.findByEmail(email).orElseThrow(() ->
@@ -26,7 +26,7 @@ public class UserService {
     @Transactional
     public User save(User user) {
         if(userRepository.findByEmail(user.getEmail()).isEmpty()) {
-            user.setPhoto("https://img.freepik.com/free-vector/cute-man-working-laptop-cartoon-vector-icon-illustration-people-technology-icon-concept-isolated_138676-9123.jpg?size=338&ext=jpg&ga=GA1.1.386372595.1698624000&semt=ais");
+            user.setPhoto("default");
             userRepository.save(user);
             return user;
         } else {
@@ -36,7 +36,7 @@ public class UserService {
 
     @Transactional
     public void updateUser(User user, UserUpdateDTO updatedUser) throws IOException {
-        String photoUrl = photoService.postFile(user ,updatedUser.getPhoto());
+        String photoUrl = imageService.postImage(user ,updatedUser.getPhoto());
         user.setFirstName(updatedUser.getFirstName());
         user.setLastName(updatedUser.getLastName());
         user.setPhoto(photoUrl);

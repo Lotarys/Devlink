@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 public class AuthenticationService {
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
-    private final PhotoService photoService;
+    private final ImageService imageService;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
@@ -29,7 +29,7 @@ public class AuthenticationService {
         String jwtToken = jwtService.generateToken(user);
         return new AuthenticationResponse(jwtToken,
                 newUser.getEmail(),
-                photoService.getPhoto(newUser.getUsername()),
+                imageService.getImage(newUser),
                 newUser.getFirstName(),
                 newUser.getLastName());
     }
@@ -45,7 +45,7 @@ public class AuthenticationService {
         User user = (User) userDetails;
         return new AuthenticationResponse(jwtToken,
                 user.getEmail(),
-                photoService.getPhoto(user.getUsername()),
+                imageService.getImage(user),
                 user.getFirstName(),
                 user.getLastName());
     }
@@ -54,6 +54,6 @@ public class AuthenticationService {
         if(user == null) {
             throw new NotFoundUserException("User does not exist");
         } else
-            return new AuthenticationResponse(token, user.getEmail(), photoService.getPhoto(user.getUsername()), user.getFirstName(), user.getLastName());
+            return new AuthenticationResponse(token, user.getEmail(), imageService.getImage(user), user.getFirstName(), user.getLastName());
     }
 }
