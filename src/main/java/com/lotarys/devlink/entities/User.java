@@ -33,7 +33,7 @@ public class User implements UserDetails {
 
     private String password;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     private List<Card> cards = new ArrayList<>();
 
     @Override

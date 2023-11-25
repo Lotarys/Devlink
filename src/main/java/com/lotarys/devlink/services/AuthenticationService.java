@@ -1,5 +1,7 @@
 package com.lotarys.devlink.services;
 
+import com.lotarys.devlink.dtos.ResponseCardDTO;
+import com.lotarys.devlink.entities.Card;
 import com.lotarys.devlink.entities.User;
 import com.lotarys.devlink.models.AuthenticationRequest;
 import com.lotarys.devlink.models.AuthenticationResponse;
@@ -11,6 +13,11 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -20,6 +27,12 @@ public class AuthenticationService {
     private final ImageService imageService;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+
+    private List<ResponseCardDTO> mapCardToCardDTO(List<Card> cards) {
+        return cards.stream()
+                .map(card -> new ResponseCardDTO(card.getId(), card.getUrl(), card.getTitle(), card.getViews()))
+                .collect(Collectors.toList());
+    }
 
     public AuthenticationResponse register(RegisterRequest request) {
         User user = new User();
@@ -31,7 +44,8 @@ public class AuthenticationService {
                 newUser.getEmail(),
                 imageService.getImage(newUser),
                 newUser.getFirstName(),
-                newUser.getLastName());
+                newUser.getLastName(),
+                mapCardToCardDTO(user.getCards()));
     }
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
@@ -47,13 +61,16 @@ public class AuthenticationService {
                 user.getEmail(),
                 imageService.getImage(user),
                 user.getFirstName(),
-                user.getLastName());
+                user.getLastName(),
+                mapCardToCardDTO(user.getCards())
+                );
     }
 
+    @Transactional
     public AuthenticationResponse Userinfo(String token, User user) {
         if(user == null) {
             throw new NotFoundUserException("User does not exist");
         } else
-            return new AuthenticationResponse(token, user.getEmail(), imageService.getImage(user), user.getFirstName(), user.getLastName());
+            return new AuthenticationResponse(token, user.getEmail(), imageService.getImage(user), user.getFirstName(), user.getLastName(), mapCardToCardDTO(user.getCards()));
     }
 }

@@ -1,9 +1,13 @@
 package com.lotarys.devlink.models;
 
+import com.lotarys.devlink.dtos.ResponseCardDTO;
+import com.lotarys.devlink.entities.Card;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.core.io.InputStreamResource;
+
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -18,4 +22,6 @@ public class AuthenticationResponse {
     private String firstName;
 
     private String lastName;
+
+    private List<ResponseCardDTO> devCards;
 }
