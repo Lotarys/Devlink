@@ -34,7 +34,7 @@ public class UserService {
 
     @Transactional
     public void updateUser(User user, UserUpdateDTO updatedUser) {
-        String photoUrl = imageService.postImage(user ,updatedUser.getRusiklox());
+        String photoUrl = imageService.postImage(user ,updatedUser.getImage());
         user.setFirstName(updatedUser.getFirstName());
         user.setLastName(updatedUser.getLastName());
         user.setPhoto(photoUrl);

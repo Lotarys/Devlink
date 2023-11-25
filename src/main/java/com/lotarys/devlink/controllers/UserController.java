@@ -28,7 +28,7 @@ public class UserController {
         UserUpdateDTO updateUserRequest = new UserUpdateDTO();
         updateUserRequest.setFirstName(firstName);
         updateUserRequest.setLastName(lastName);
-        updateUserRequest.setRusiklox(file);
+        updateUserRequest.setImage(file);
         userService.updateUser(user, updateUserRequest);
         return ResponseEntity
                 .status(HttpStatus.OK)
