@@ -10,8 +10,12 @@ import org.springframework.core.io.InputStreamResource;
 @AllArgsConstructor
 public class AuthenticationResponse {
     private String token;
+
     private String email;
-    private String photo;
+
+    private String img;
+
     private String firstName;
+
     private String lastName;
 }
