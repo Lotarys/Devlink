@@ -24,15 +24,14 @@ public class UserController {
     public ResponseEntity<?> updateUser(@AuthenticationPrincipal User user,
                                         @RequestParam("firstName") String firstName,
                                         @RequestParam("lastName") String lastName,
-                                        @RequestParam("file") MultipartFile file)  {
+                                        @RequestParam(value = "file", required = false) MultipartFile file)  {
         UserUpdateDTO updateUserRequest = new UserUpdateDTO();
         updateUserRequest.setFirstName(firstName);
         updateUserRequest.setLastName(lastName);
         updateUserRequest.setImage(file);
-        userService.updateUser(user, updateUserRequest);
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body("User updated");
+                .body(userService.updateUser(user, updateUserRequest));
     }
 
     @GetMapping("/photo")

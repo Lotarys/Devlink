@@ -3,6 +3,7 @@ package com.lotarys.devlink.services;
 
 import com.lotarys.devlink.entities.User;
 import com.lotarys.devlink.dtos.UserUpdateDTO;
+import com.lotarys.devlink.models.UpdateUserResponse;
 import com.lotarys.devlink.repositories.UserRepository;
 import com.lotarys.devlink.exceptions.NotFoundUserException;
 import com.lotarys.devlink.exceptions.UserAlreadyExistException;
@@ -33,11 +34,14 @@ public class UserService {
     }
 
     @Transactional
-    public void updateUser(User user, UserUpdateDTO updatedUser) {
-        String photoUrl = imageService.postImage(user ,updatedUser.getImage());
+    public UpdateUserResponse updateUser(User user, UserUpdateDTO updatedUser) {
+        if(updatedUser.getImage() != null) {
+            String photoUrl = imageService.postImage(user, updatedUser.getImage());
+            user.setPhoto(photoUrl);
+        }
         user.setFirstName(updatedUser.getFirstName());
         user.setLastName(updatedUser.getLastName());
-        user.setPhoto(photoUrl);
         userRepository.save(user);
+        return new UpdateUserResponse(imageService.getImage(user), updatedUser.getFirstName(), updatedUser.getLastName());
     }
 }
