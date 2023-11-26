@@ -71,6 +71,13 @@ public class AuthenticationService {
         if(user == null) {
             throw new NotFoundUserException("User does not exist");
         } else
-            return new AuthenticationResponse(token, user.getEmail(), imageService.getImage(user), user.getFirstName(), user.getLastName(), mapCardToCardDTO(user.getCards()));
+            return new AuthenticationResponse(
+                    token,
+                    user.getEmail(),
+                    imageService.getImage(user),
+                    user.getFirstName(),
+                    user.getLastName(),
+                    mapCardToCardDTO(user.getCards())
+            );
     }
 }

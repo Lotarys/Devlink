@@ -38,6 +38,7 @@ public class CardService {
     @Transactional
     public void createCard(CardDTO cardDTO, User user) {
             Card card = new Card();
+            List<Link> links = cardDTO.getLinks();
             String randomString = generateRandomString();
             while (cardRepository.findByUrl(randomString) == null) {
                 randomString = generateRandomString();
@@ -46,9 +47,9 @@ public class CardService {
             card.setUser(user);
             card.setViews(0L);
             card.setTitle(cardDTO.getTitle());
-            card.setLinks(cardDTO.getLinks());
+            card.setLinks(links);
             cardRepository.save(card);
-            linkService.addLinks(cardDTO.getLinks(), card);
+            linkService.addLinks(links, card);
     }
 
     public List<Card> getCardsOfUser(User user) {
