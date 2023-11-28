@@ -1,11 +1,13 @@
 package com.lotarys.devlink.services;
 
+import com.lotarys.devlink.entities.Card;
 import com.lotarys.devlink.entities.User;
 import com.lotarys.devlink.exceptions.GetPhotoException;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -87,7 +89,7 @@ public class ImageService {
         }
     }
 
-    public String getImage(User user) {
+    public String getUserImage(User user) {
             if(user.getPhoto().equals("default"))
             {
                return getImageInBase64(user.getPhoto());
@@ -96,7 +98,23 @@ public class ImageService {
             }
     }
 
-    public String postImage(User user, MultipartFile file) {
+    public String getCardImage(Card card) {
+        try {
+            return getImageInBase64(card.getUrl());
+        } catch (GetPhotoException e) {
+            return getImageInBase64(card.getUser().getUsername());
+        }
+    }
+
+    public void postCardImage(Card card, MultipartFile file, User user) {
+        if(!card.getUser().equals(user)) {
+            throw new AccessDeniedException("Access Denied");
+        } else {
+            uploadImage(file, getUrlForUpload(card.getUrl()));
+        }
+    }
+
+    public String postUserImage(User user, MultipartFile file) {
         String username = user.getUsername();
         if(!user.getPhoto().equals("default")) {
             deleteImage(user);

@@ -43,6 +43,9 @@ public class CardService {
             while (cardRepository.findByUrl(randomString) == null) {
                 randomString = generateRandomString();
             }
+            card.setFirstName(cardDTO.getFirstName());
+            card.setLastName(cardDTO.getLastName());
+            card.setEmail(cardDTO.getEmail());
             card.setUrl(randomString);
             card.setUser(user);
             card.setViews(0L);

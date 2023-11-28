@@ -1,5 +1,6 @@
 package com.lotarys.devlink.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,6 +21,12 @@ public class Card {
 
     private String url;
 
+    private String email;
+
+    private String firstName;
+
+    private String lastName;
+
     private String title;
 
     private Long views;
@@ -29,5 +36,6 @@ public class Card {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
+    @JsonIgnore
     private User user;
 }

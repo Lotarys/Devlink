@@ -15,7 +15,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,7 +29,14 @@ public class AuthenticationService {
 
     private List<ResponseCardDTO> mapCardToCardDTO(List<Card> cards) {
         return cards.stream()
-                .map(card -> new ResponseCardDTO(card.getId(), card.getUrl(), card.getTitle(), card.getViews()))
+                .map(card -> new ResponseCardDTO(
+                        card.getId(),
+                        card.getUrl(),
+                        imageService.getCardImage(card),
+                        card.getTitle(),
+                        card.getViews(),
+                        card.getLinks())
+                )
                 .collect(Collectors.toList());
     }
 
@@ -40,12 +46,14 @@ public class AuthenticationService {
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         User newUser = userService.save(user);
         String jwtToken = jwtService.generateToken(user);
-        return new AuthenticationResponse(jwtToken,
+        return new AuthenticationResponse(
+                jwtToken,
                 newUser.getEmail(),
-                imageService.getImage(newUser),
+                imageService.getUserImage(newUser),
                 newUser.getFirstName(),
                 newUser.getLastName(),
-                mapCardToCardDTO(user.getCards()));
+                mapCardToCardDTO(user.getCards())
+        );
     }
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
@@ -57,13 +65,14 @@ public class AuthenticationService {
         ).getPrincipal();
         var jwtToken = jwtService.generateToken(userDetails);
         User user = (User) userDetails;
-        return new AuthenticationResponse(jwtToken,
+        return new AuthenticationResponse(
+                jwtToken,
                 user.getEmail(),
-                imageService.getImage(user),
+                imageService.getUserImage(user),
                 user.getFirstName(),
                 user.getLastName(),
                 mapCardToCardDTO(user.getCards())
-                );
+        );
     }
 
     @Transactional
@@ -74,7 +83,7 @@ public class AuthenticationService {
             return new AuthenticationResponse(
                     token,
                     user.getEmail(),
-                    imageService.getImage(user),
+                    imageService.getUserImage(user),
                     user.getFirstName(),
                     user.getLastName(),
                     mapCardToCardDTO(user.getCards())

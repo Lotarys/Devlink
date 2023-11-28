@@ -36,12 +36,12 @@ public class UserService {
     @Transactional
     public UpdateUserResponse updateUser(User user, UserUpdateDTO updatedUser) {
         if(updatedUser.getImage() != null) {
-            String photoUrl = imageService.postImage(user, updatedUser.getImage());
+            String photoUrl = imageService.postUserImage(user, updatedUser.getImage());
             user.setPhoto(photoUrl);
         }
         user.setFirstName(updatedUser.getFirstName());
         user.setLastName(updatedUser.getLastName());
         userRepository.save(user);
-        return new UpdateUserResponse(imageService.getImage(user), updatedUser.getFirstName(), updatedUser.getLastName());
+        return new UpdateUserResponse(imageService.getUserImage(user), updatedUser.getFirstName(), updatedUser.getLastName());
     }
 }

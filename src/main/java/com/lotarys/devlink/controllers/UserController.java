@@ -38,7 +38,7 @@ public class UserController {
     public ResponseEntity<String> getPhoto(@AuthenticationPrincipal User user) {
         return ResponseEntity
                 .ok()
-                .body(imageService.getImage(user));
+                .body(imageService.getUserImage(user));
     }
 
     @GetMapping("/info")
