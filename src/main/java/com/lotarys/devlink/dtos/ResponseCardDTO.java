@@ -17,6 +17,12 @@ public class ResponseCardDTO {
 
     private String img;
 
+    private String firstName;
+
+    private String lastName;
+
+    private String email;
+
     private String title;
 
     private Long views;

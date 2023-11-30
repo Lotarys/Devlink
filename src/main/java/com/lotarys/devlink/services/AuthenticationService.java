@@ -32,6 +32,9 @@ public class AuthenticationService {
                 .map(card -> new ResponseCardDTO(
                         card.getId(),
                         card.getUrl(),
+                        card.getFirstName(),
+                        card.getLastName(),
+                        card.getEmail(),
                         imageService.getCardImage(card),
                         card.getTitle(),
                         card.getViews(),

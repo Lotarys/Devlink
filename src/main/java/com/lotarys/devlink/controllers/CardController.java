@@ -1,14 +1,13 @@
 package com.lotarys.devlink.controllers;
 
 import com.lotarys.devlink.dtos.CardDTO;
+import com.lotarys.devlink.dtos.ResponseCardDTO;
 import com.lotarys.devlink.entities.Card;
 import com.lotarys.devlink.entities.Link;
 import com.lotarys.devlink.entities.User;
 import com.lotarys.devlink.services.CardService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -29,9 +28,9 @@ public class CardController {
   }
 
   @GetMapping("/{url}")
-  public ResponseEntity<Card> getCard(@PathVariable String url) {
+  public ResponseEntity<ResponseCardDTO> getCard(@PathVariable String url) {
       return ResponseEntity
-              .ok(cardService.getCardByUrl(url));
+              .ok(cardService.getResponseCardByUrl(url));
   }
 
   @GetMapping()

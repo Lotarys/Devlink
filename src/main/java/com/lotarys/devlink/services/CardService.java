@@ -1,11 +1,11 @@
 package com.lotarys.devlink.services;
 
 import com.lotarys.devlink.dtos.CardDTO;
+import com.lotarys.devlink.dtos.ResponseCardDTO;
 import com.lotarys.devlink.entities.Card;
 import com.lotarys.devlink.entities.Link;
 import com.lotarys.devlink.entities.User;
 import com.lotarys.devlink.repositories.CardRepository;
-import com.lotarys.devlink.exceptions.CardAlreadyExistException;
 import com.lotarys.devlink.exceptions.NotFoundCardException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.AccessDeniedException;
@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -33,6 +34,20 @@ public class CardService {
                 sb.append(rndChar);
             }
             return sb.toString();
+    }
+
+    private ResponseCardDTO mapCardToCardDTO(Card card) {
+        return new ResponseCardDTO(
+                        card.getId(),
+                        card.getUrl(),
+                        imageService.getCardImage(card),
+                        card.getFirstName(),
+                        card.getLastName(),
+                        card.getEmail(),
+                        card.getTitle(),
+                        card.getViews(),
+                        card.getLinks()
+        );
     }
 
     @Transactional
@@ -59,8 +74,15 @@ public class CardService {
         return user.getCards();
     }
 
+    public ResponseCardDTO getResponseCardByUrl(String url) {
+        Card card = cardRepository.findByUrl(url).orElseThrow(() ->
+                new NotFoundCardException("Card with url " + url + " does not exist"));
+        return mapCardToCardDTO(card);
+    }
+
     public Card getCardByUrl(String url) {
-        return cardRepository.findByUrl(url).orElseThrow(() -> new NotFoundCardException("Card with url " + url + "does not exist"));
+        return cardRepository.findByUrl(url).orElseThrow(() ->
+                new NotFoundCardException("Card with url " + url + " does not exist"));
     }
 
     @Transactional
