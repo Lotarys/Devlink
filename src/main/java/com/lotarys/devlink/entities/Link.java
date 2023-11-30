@@ -20,7 +20,7 @@ public class Link {
 
     private String url;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "card_id")
     @JsonIgnore
     private Card card;

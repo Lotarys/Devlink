@@ -106,12 +106,8 @@ public class ImageService {
         }
     }
 
-    public void postCardImage(Card card, MultipartFile file, User user) {
-        if(!card.getUser().equals(user)) {
-            throw new AccessDeniedException("Access Denied");
-        } else {
-            uploadImage(file, getUrlForUpload(card.getUrl()));
-        }
+    public void postCardImage(Card card, MultipartFile file, String url) {
+            uploadImage(file, getUrlForUpload(url));
     }
 
     public String postUserImage(User user, MultipartFile file) {

@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -22,8 +23,10 @@ public class CardController {
     private final CardService cardService;
 
   @PostMapping()
-  public ResponseEntity<?> createCard(@RequestBody CardDTO card, @AuthenticationPrincipal User user) {
-      cardService.createCard(card, user);
+  public ResponseEntity<?> createCard(@RequestPart CardDTO card,
+                                      @RequestPart MultipartFile img,
+                                      @AuthenticationPrincipal User user) {
+      cardService.createCard(card, img, user);
       return ResponseEntity.ok().body(HttpStatus.CREATED);
   }
 

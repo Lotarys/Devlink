@@ -1,4 +1,7 @@
 spring:
+  servlet:
+    multipart:
+      enabled: true
   datasource:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://dpg-cl0luf48s0fs73eqp7v0-a.frankfurt-postgres.render.com:5432/devlink_mq8n

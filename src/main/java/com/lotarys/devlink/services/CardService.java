@@ -11,9 +11,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -51,23 +50,23 @@ public class CardService {
     }
 
     @Transactional
-    public void createCard(CardDTO cardDTO, User user) {
-            Card card = new Card();
-            List<Link> links = cardDTO.getLinks();
-            String randomString = generateRandomString();
-            while (cardRepository.findByUrl(randomString) == null) {
-                randomString = generateRandomString();
-            }
-            card.setFirstName(cardDTO.getFirstName());
-            card.setLastName(cardDTO.getLastName());
-            card.setEmail(cardDTO.getEmail());
-            card.setUrl(randomString);
-            card.setUser(user);
-            card.setViews(0L);
-            card.setTitle(cardDTO.getTitle());
-            card.setLinks(links);
-            cardRepository.save(card);
-            linkService.addLinks(links, card);
+    public void createCard(CardDTO cardDTO, MultipartFile img, User user) {
+        Card card = new Card();
+        List<Link> links = cardDTO.getLinks();
+        String randomString = generateRandomString();
+        while (cardRepository.findByUrl(randomString) == null) {
+            randomString = generateRandomString();
+        }
+        card.setFirstName(cardDTO.getFirstName());
+        card.setLastName(cardDTO.getLastName());
+        card.setEmail(cardDTO.getEmail());
+        imageService.postCardImage(card, img, randomString);
+        card.setUrl(randomString);
+        card.setUser(user);
+        card.setViews(0L);
+        card.setTitle(cardDTO.getTitle());
+        cardRepository.save(card);
+        linkService.addLinks(links, card);
     }
 
     public List<Card> getCardsOfUser(User user) {
