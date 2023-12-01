@@ -69,8 +69,8 @@ public class CardService {
         linkService.addLinks(links, card);
     }
 
-    public List<Card> getCardsOfUser(User user) {
-        return user.getCards();
+    public List<ResponseCardDTO> getCardsOfUser(User user) {
+        return user.getCards().stream().map((this::mapCardToCardDTO)).toList();
     }
 
     public ResponseCardDTO getResponseCardByUrl(String url) {

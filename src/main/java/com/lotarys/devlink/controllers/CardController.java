@@ -19,7 +19,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/card")
 public class CardController {
-    //TODO Решить как будет формироваться ссылка, решить что возвращать при создании карты.
+    //TODO эндпоинт на удаление, изменение.
     private final CardService cardService;
 
   @PostMapping()
@@ -37,7 +37,7 @@ public class CardController {
   }
 
   @GetMapping()
-  public ResponseEntity<List<Card>> getAllCardsOfUser(@AuthenticationPrincipal User user) {
+  public ResponseEntity<List<ResponseCardDTO>> getAllCardsOfUser(@AuthenticationPrincipal User user) {
       return ResponseEntity
               .ok(cardService.getCardsOfUser(user));
   }
