@@ -1,8 +1,8 @@
 package com.lotarys.devlink.controllers;
 
-import com.lotarys.devlink.dtos.UserDTO;
 import com.lotarys.devlink.entities.User;
 import com.lotarys.devlink.dtos.UserUpdateDTO;
+import com.lotarys.devlink.models.AuthenticationResponse;
 import com.lotarys.devlink.services.ImageService;
 import com.lotarys.devlink.services.UserService;
 import lombok.RequiredArgsConstructor;
@@ -41,9 +41,8 @@ public class UserController {
                 .body(imageService.getUserImage(user));
     }
 
-    @GetMapping("/info")
-    public ResponseEntity<UserDTO> userInfo(@AuthenticationPrincipal User user) {
-        return ResponseEntity
-                .ok(new UserDTO(user.getFirstName(), user.getLastName()));
+    @GetMapping("/me")
+    public ResponseEntity<AuthenticationResponse> userInfo(@AuthenticationPrincipal User user) {
+        return ResponseEntity.ok(userService.getUserinfo(user));
     }
 }

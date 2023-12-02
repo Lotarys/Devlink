@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -40,18 +39,17 @@ public class ImageService {
     private HttpEntity createEntityWithOauth() {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "OAuth " + OAUTH_TOKEN);
-        HttpEntity<String> entity = new HttpEntity<>("parameters", headers);
-        return entity;
+        return new HttpEntity<>("parameters", headers);
     }
 
     private String createPath(String username) {
         return username + "_photo";
     }
 
-    private void deleteImage(User user) {
+    private void deleteImage(String image) {
         HttpHeaders headers = createEntityWithOauth().getHeaders();
         HttpEntity<String> entity = new HttpEntity<>(headers);
-        ResponseEntity<String> response = restTemplate.exchange(user.getPhoto() + "&permanently=true",
+        restTemplate.exchange("https://cloud-api.yandex.net/v1/disk/resources?path=" + image + "_photo" + "&permanently=true",
                 HttpMethod.DELETE,
                 entity,
                 String.class);
@@ -61,7 +59,7 @@ public class ImageService {
         MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
         body.add("file", file.getResource());
         HttpEntity<MultiValueMap<String, Object>> entityForPostFile = new HttpEntity<>(body, null);
-        ResponseEntity<String> response = restTemplate.exchange(uploadUrl,
+        restTemplate.exchange(uploadUrl,
                 HttpMethod.PUT,
                 entityForPostFile,
                 String.class);
@@ -107,13 +105,18 @@ public class ImageService {
     }
 
     public void postCardImage(MultipartFile file, String url) {
+            try {
+                deleteImage(url);
+            } catch (Exception e) {
+
+            }
             uploadImage(file, getUrlForUpload(url));
     }
 
     public String postUserImage(User user, MultipartFile file) {
         String username = user.getUsername();
         if(!user.getPhoto().equals("default")) {
-            deleteImage(user);
+            deleteImage(username);
         }
         uploadImage(file, getUrlForUpload(username));
         return "https://cloud-api.yandex.net/v1/disk/resources?path=" + createPath(username);

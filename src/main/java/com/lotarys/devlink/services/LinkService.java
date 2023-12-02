@@ -6,7 +6,6 @@ import com.lotarys.devlink.entities.Link;
 import com.lotarys.devlink.repositories.LinkRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service

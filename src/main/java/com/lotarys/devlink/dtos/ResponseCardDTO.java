@@ -1,13 +1,12 @@
 package com.lotarys.devlink.dtos;
 
 import com.lotarys.devlink.entities.Link;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class ResponseCardDTO {

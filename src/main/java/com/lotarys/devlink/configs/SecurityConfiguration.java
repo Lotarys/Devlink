@@ -31,7 +31,14 @@ public class SecurityConfiguration implements WebMvcConfigurer {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .cors(cors -> cors.configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues()))
+                .cors(cors -> cors.configurationSource(request -> {
+                    CorsConfiguration corss = new CorsConfiguration();
+                    corss.addAllowedOriginPattern("*");
+                    corss.addAllowedHeader("*");
+                    corss.applyPermitDefaultValues();
+                    corss.addAllowedMethod(CorsConfiguration.ALL);
+                    return corss;
+                }))
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth ->
                         auth

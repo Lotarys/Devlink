@@ -2,9 +2,7 @@ package com.lotarys.devlink.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +11,8 @@ import java.util.List;
 @Table(name = "cards")
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
 public class Card {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

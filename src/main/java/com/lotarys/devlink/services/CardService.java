@@ -7,8 +7,8 @@ import com.lotarys.devlink.entities.Link;
 import com.lotarys.devlink.entities.User;
 import com.lotarys.devlink.repositories.CardRepository;
 import com.lotarys.devlink.exceptions.NotFoundCardException;
+import com.lotarys.devlink.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,6 +20,7 @@ public class CardService {
     private final CardRepository cardRepository;
     private final LinkService linkService;
     private final ImageService imageService;
+    private final UserRepository userRepository;
 
     private String generateRandomString() {
             String charLower = "abcdefghijklmnopqrstuvwxyz";
@@ -70,7 +71,8 @@ public class CardService {
     }
 
     public List<ResponseCardDTO> getCardsOfUser(User user) {
-        return user.getCards().stream().map((this::mapCardToCardDTO)).toList();
+        User newUser = userRepository.findUserWithCards(user.getId());
+        return newUser.getCards().stream().map(this::mapCardToCardDTO).toList();
     }
 
     public ResponseCardDTO getResponseCardByUrl(String url) {
@@ -79,39 +81,19 @@ public class CardService {
         return mapCardToCardDTO(card);
     }
 
-    public Card getCardByUrl(String url) {
-        return cardRepository.findByUrl(url).orElseThrow(() ->
-                new NotFoundCardException("Card with url " + url + " does not exist"));
-    }
-
     @Transactional
-    public Card addLinkToCard(User user, Card card, List<Link> links) {
-        if(card.getUser().getId() != user.getId()) {
-            throw new AccessDeniedException("You don't have permissions to do this");
-        }
-        if (links == null) {
-            throw new IllegalArgumentException("the links can't be empty");
-        }
-        List<Link> existingLinks = card.getLinks();
-        if (existingLinks != null) {
-            links.addAll(existingLinks);
-        }
-        card.setLinks(links);
-        cardRepository.save(card);
-        return card;
-    }
-
     public void deleteCard(String url) {
         cardRepository.deleteByUrl(url);
     }
 
+    @Transactional
     public void updateCard(String url, CardDTO cardDTO, MultipartFile img) {
+        imageService.postCardImage(img, url);
         Card card = cardRepository.findByUrl(url).orElseThrow(() -> new NotFoundCardException("Card with url " + url + " does not exist"));
         List<Link> links = cardDTO.getLinks();
         card.setFirstName(cardDTO.getFirstName());
         card.setLastName(cardDTO.getLastName());
         card.setEmail(cardDTO.getEmail());
-        imageService.postCardImage(img, url);
         card.setTitle(cardDTO.getTitle());
         cardRepository.save(card);
         linkService.addLinks(links, card);
