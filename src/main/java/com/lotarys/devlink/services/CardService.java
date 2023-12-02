@@ -60,7 +60,7 @@ public class CardService {
         card.setFirstName(cardDTO.getFirstName());
         card.setLastName(cardDTO.getLastName());
         card.setEmail(cardDTO.getEmail());
-        imageService.postCardImage(card, img, randomString);
+        imageService.postCardImage(img, randomString);
         card.setUrl(randomString);
         card.setUser(user);
         card.setViews(0L);
@@ -99,5 +99,21 @@ public class CardService {
         card.setLinks(links);
         cardRepository.save(card);
         return card;
+    }
+
+    public void deleteCard(String url) {
+        cardRepository.deleteByUrl(url);
+    }
+
+    public void updateCard(String url, CardDTO cardDTO, MultipartFile img) {
+        Card card = cardRepository.findByUrl(url).orElseThrow(() -> new NotFoundCardException("Card with url " + url + " does not exist"));
+        List<Link> links = cardDTO.getLinks();
+        card.setFirstName(cardDTO.getFirstName());
+        card.setLastName(cardDTO.getLastName());
+        card.setEmail(cardDTO.getEmail());
+        imageService.postCardImage(img, url);
+        card.setTitle(cardDTO.getTitle());
+        cardRepository.save(card);
+        linkService.addLinks(links, card);
     }
 }

@@ -8,5 +8,6 @@ import java.util.Optional;
 
 @Repository
 public interface CardRepository extends JpaRepository<Card, Long> {
+    void deleteByUrl(String url);
     Optional<Card> findByUrl(String url);
 }

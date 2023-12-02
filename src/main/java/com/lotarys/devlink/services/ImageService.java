@@ -106,7 +106,7 @@ public class ImageService {
         }
     }
 
-    public void postCardImage(Card card, MultipartFile file, String url) {
+    public void postCardImage(MultipartFile file, String url) {
             uploadImage(file, getUrlForUpload(url));
     }
 

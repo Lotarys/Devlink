@@ -20,7 +20,7 @@ public class UserController {
     private final UserService userService;
     private final ImageService imageService;
 
-    @PostMapping("/update")
+    @PutMapping("/update")
     public ResponseEntity<?> updateUser(@AuthenticationPrincipal User user,
                                         @RequestParam("firstName") String firstName,
                                         @RequestParam("lastName") String lastName,
