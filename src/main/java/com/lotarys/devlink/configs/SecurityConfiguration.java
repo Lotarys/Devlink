@@ -32,17 +32,17 @@ public class SecurityConfiguration implements WebMvcConfigurer {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .cors(cors -> cors.configurationSource(request -> {
-                    CorsConfiguration corss = new CorsConfiguration();
-                    corss.addAllowedOriginPattern("*");
-                    corss.addAllowedHeader("*");
-                    corss.applyPermitDefaultValues();
-                    corss.addAllowedMethod(CorsConfiguration.ALL);
-                    return corss;
+                    CorsConfiguration corsConfiguration = new CorsConfiguration();
+                    corsConfiguration.addAllowedOriginPattern("*");
+                    corsConfiguration.addAllowedHeader("*");
+                    corsConfiguration.applyPermitDefaultValues();
+                    corsConfiguration.addAllowedMethod(CorsConfiguration.ALL);
+                    return corsConfiguration;
                 }))
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth ->
                         auth
-                                .requestMatchers("/auth/register", "auth/authenticate")
+                                .requestMatchers("/auth/register", "/auth/authenticate", "/card/get/**")
                                 .permitAll()
                                 .anyRequest()
                                 .authenticated()
@@ -51,8 +51,6 @@ public class SecurityConfiguration implements WebMvcConfigurer {
                         sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
-
-
         return http.build();
     }
 }

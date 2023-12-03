@@ -10,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.util.List;
 
 @RestController
@@ -19,7 +18,7 @@ import java.util.List;
 public class CardController {
     private final CardService cardService;
 
-  @PostMapping()
+  @PostMapping("/create")
   public ResponseEntity<?> createCard(@RequestPart CardDTO card,
                                       @RequestPart MultipartFile img,
                                       @AuthenticationPrincipal User user) {
@@ -27,13 +26,13 @@ public class CardController {
       return ResponseEntity.ok().body(HttpStatus.CREATED);
   }
 
-  @GetMapping("/{url}")
+  @GetMapping("/get/{url}")
   public ResponseEntity<ResponseCardDTO> getCard(@PathVariable String url) {
       return ResponseEntity
               .ok(cardService.getResponseCardByUrl(url));
   }
 
-  @PutMapping("/{url}")
+  @PutMapping("/update/{url}")
   public ResponseEntity<HttpStatus> updateCard(@PathVariable String url,
                                       @RequestPart CardDTO card,
                                       @RequestPart MultipartFile img) {
@@ -41,7 +40,7 @@ public class CardController {
         return ResponseEntity.ok(HttpStatus.OK);
   }
 
-  @DeleteMapping("/{url}")
+  @DeleteMapping("/delete/{url}")
   public ResponseEntity<HttpStatus> deleteCard(@PathVariable String url) {
       cardService.deleteCard(url);
       return ResponseEntity.ok(HttpStatus.OK);
