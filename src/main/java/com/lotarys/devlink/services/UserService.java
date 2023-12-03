@@ -68,10 +68,9 @@ public class UserService {
 
     public AuthenticationResponse getUserinfo(User user) {
         User newUser = userRepository.findUserWithCards(user.getId());
-        if(user == null) {
+        if(newUser == null) {
             throw new NotFoundUserException("User does not exist");
         } else
-
             return new AuthenticationResponse(
                     user.getEmail(),
                     imageService.getUserImage(user),
