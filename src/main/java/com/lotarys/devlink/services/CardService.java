@@ -83,6 +83,7 @@ public class CardService {
 
     @Transactional
     public void deleteCard(String url) {
+        imageService.deleteCardImage(url);
         cardRepository.deleteByUrl(url);
     }
 

@@ -19,7 +19,7 @@ spring:
 jwt:
   SECRET_KEY: 5007cbe87e2807243289f5cec99a57364348226c638e09d8dc008ae99e3918cd
 yandex:
-  token: y0_AgAAAABeuc4rAArFNAAAAADxHSiblzU0nbCVQ2WsQGWjWoWAvJ0oWbE
+  token: ${YANDEX_TOKEN_VARIABLE}
 logging:
   level:
     org.springframework: debug

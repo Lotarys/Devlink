@@ -104,6 +104,13 @@ public class ImageService {
         }
     }
 
+    public void deleteCardImage(String url) {
+        try {
+            deleteImage(url);
+        } catch (Exception e) {
+        }
+    }
+
     public void postCardImage(MultipartFile file, String url) {
             try {
                 deleteImage(url);
