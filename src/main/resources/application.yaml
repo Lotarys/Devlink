@@ -4,9 +4,9 @@ spring:
       enabled: true
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://dpg-cmfrjfug1b2c73cotg10-a.frankfurt-postgres.render.com:5432/devlink_nk00
-    username: lotarys
-    password: J5kFofm30FN7PH3CD2KVTeTj2kGCHMXj
+    url: jdbc:postgresql://db:5432/postgres
+    username: postgres
+    password: postgres
   jpa:
     hibernate:
       ddl-auto: update
