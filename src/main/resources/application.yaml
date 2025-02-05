@@ -4,9 +4,9 @@ spring:
       enabled: true
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://dpg-cmfrjfug1b2c73cotg10-a.frankfurt-postgres.render.com:5432/devlink_nk00
-    username: lotarys
-    password: J5kFofm30FN7PH3CD2KVTeTj2kGCHMXj
+    url: jdbc:postgresql://dpg-cuhqokdumphs73a60jmg-a.frankfurt-postgres.render.com/devlink_btib
+    username: lotary
+    password: fSan4nnLuLtWgDLkKLKhojlFYPOG7Jgq
   jpa:
     hibernate:
       ddl-auto: update
@@ -19,7 +19,7 @@ spring:
 jwt:
   SECRET_KEY: 5007cbe87e2807243289f5cec99a57364348226c638e09d8dc008ae99e3918cd
 yandex:
-  token: y0_AgAAAABeuc4rAArFNAAAAAD3vDjKzCxAQbJwQMq5aB-RzzST3EAYMlo
+  token: f7b69be380534db78ba0f88a6c150019
 logging:
   level:
     org.springframework: debug
