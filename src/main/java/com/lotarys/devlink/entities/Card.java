@@ -28,7 +28,7 @@ public class Card {
 
     private String title;
 
-    private Long views;
+    private Long views = 1L;
 
     @OneToMany(mappedBy = "card", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Link> links = new ArrayList<>();

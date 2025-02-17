@@ -78,6 +78,8 @@ public class CardService {
     public ResponseCardDTO getResponseCardByUrl(String url) {
         Card card = cardRepository.findByUrl(url).orElseThrow(() ->
                 new NotFoundCardException("Card with url " + url + " does not exist"));
+        card.setViews(card.getViews() + 1);
+        cardRepository.save(card);
         return mapCardToCardDTO(card);
     }
 
