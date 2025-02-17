@@ -1,5 +1,6 @@
 package com.lotarys.devlink.configs;
 
+import com.lotarys.devlink.services.MyUserDetailsService;
 import com.lotarys.devlink.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -17,17 +18,14 @@ import org.springframework.web.client.RestTemplate;
 @Configuration
 @RequiredArgsConstructor
 public class ApplicationConfig {
-    private final UserService userService;
+    private final MyUserDetailsService myUserDetailsService;
 
-    @Bean
-    public UserDetailsService userDetailsService() {
-        return email -> userService.findByEmail(email);
-    }
+
 
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(userDetailsService());
+        authProvider.setUserDetailsService(myUserDetailsService);
         authProvider.setPasswordEncoder(passwordEncoder());
         return authProvider;
     }

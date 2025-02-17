@@ -11,6 +11,7 @@ import com.lotarys.devlink.repositories.UserRepository;
 import com.lotarys.devlink.exceptions.NotFoundUserException;
 import com.lotarys.devlink.exceptions.UserAlreadyExistException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
@@ -21,6 +22,7 @@ import java.util.stream.Collectors;
 public class UserService {
     private final UserRepository userRepository;
     private final ImageService imageService;
+    private final PasswordEncoder passwordEncoder;
 
     private List<ResponseCardDTO> mapCardToCardDTO(List<Card> cards) {
         return cards.stream()
@@ -38,15 +40,11 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
-    public User findByEmail(String email) {
-        return userRepository.findByEmail(email).orElseThrow(() ->
-                new NotFoundUserException("User with email: " + email + " not found"));
-    }
-
     @Transactional
     public User save(User user) {
         if(userRepository.findByEmail(user.getEmail()).isEmpty()) {
             user.setPhoto("default");
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
             userRepository.save(user);
             return user;
         } else {
